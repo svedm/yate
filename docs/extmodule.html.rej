@@ -1,0 +1,21 @@
+--- docs/extmodule.html	2020-03-03 16:03:32.000000000 +0000
++++ docs/extmodule.html	2021-03-14 22:40:51.586542199 +0000
+@@ -222,17 +222,17 @@
+ engine.cfgsuffix (string,readonly) - Suffix of the config files names, normally &quot;.conf&quot;<br />
+ engine.modulepath (string,readonly) - Path to the main modules directory<br />
+ engine.modsuffix (string,readonly) - Suffix of the loadable modules, normally &quot;.yate&quot;<br />
+ engine.logfile (string,readonly) - Name of the log file if in use, empty if not logging<br />
+ engine.clientmode (bool,readonly) - Check if running as a client<br />
+ engine.supervised (bool,readonly) - Check if running under supervisor <br />
+ engine.maxworkers (int,readonly) - Maximum number of message worker threads<br />
+ <b>Engine configuration file parameters:</b><br />
+-config.&lt;section&gt;.&lt;key&gt; (readonly) - Content of key= in [section] of main config file (yate.conf, yate-qt4.conf)<br />
++config.&lt;section&gt;.&lt;key&gt; (readonly) - Content of key= in [section] of main config file (yate.conf, yate-qt5.conf)<br />
+ </p>
+ 
+ <p><b>Keyword: %%&lt;setlocal</b><br />
+ %%&lt;setlocal:&lt;name&gt;:&lt;value&gt;:&lt;success&gt;<br />
+ <b>Direction: Engine to application</b><br />
+ Confirmation from engine to the application that the local parameter has been
+ changed successfully or not.<br />
+ &lt;name&gt; - name of the modified parameter<br />

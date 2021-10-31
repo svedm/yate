@@ -2,7 +2,7 @@
  * clientarchive.h
  *
  * Yet Another Telephony Engine - a fully featured software PBX and IVR
- * Copyright (C) 2004-2014 Null Team
+ * Copyright (C) 2004-2020 Null Team
  *
  * Client archive management and UI logic
  *
@@ -21,7 +21,7 @@
 #ifndef __CLIENTARCHIVE_H
 #define __CLIENTARCHIVE_H
 
-#include <qt4client.h>
+#include <qt5client.h>
 
 using namespace TelEngine;
 namespace { // anonymous

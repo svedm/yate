@@ -5,7 +5,7 @@
  * Custom QtTree based objects
  *
  * Yet Another Telephony Engine - a fully featured software PBX and IVR
- * Copyright (C) 2010-2014 Null Team
+ * Copyright (C) 2010-2020 Null Team
  *
  * This software is distributed under multiple licenses;
  * see the COPYING file in the main directory for licensing
@@ -176,14 +176,14 @@ static inline void stableSort(QVector<QtTreeItemKey>& v,
 {
     if (order == Qt::AscendingOrder) {
 	if (cs == Qt::CaseInsensitive)
-	    qStableSort(v.begin(),v.end(),caseInsensitiveLessThan);
+	    std::stable_sort(v.begin(),v.end(),caseInsensitiveLessThan);
 	else
-	    qStableSort(v.begin(),v.end(),caseSensitiveLessThan);
+	    std::stable_sort(v.begin(),v.end(),caseSensitiveLessThan);
     }
     else if (cs == Qt::CaseInsensitive)
-	qStableSort(v.begin(),v.end(),caseInsensitiveGreaterThan);
+	std::stable_sort(v.begin(),v.end(),caseInsensitiveGreaterThan);
     else
-	qStableSort(v.begin(),v.end(),caseSensitiveGreaterThan);
+	std::stable_sort(v.begin(),v.end(),caseSensitiveGreaterThan);
 }
 
 // Utility: sort
@@ -583,13 +583,13 @@ QtCustomTree::QtCustomTree(const char* name, const NamedList& params, QWidget* p
 		    continue;
 		const String& szMode = header ? objListItem(sizeMode,n) : String::empty();
 		if (szMode == "fixed")
-		    header->setResizeMode(n,QHeaderView::Fixed);
+		    header->setSectionResizeMode(n,QHeaderView::Fixed);
 		else if (szMode == "stretch")
-		    header->setResizeMode(n,QHeaderView::Stretch);
+		    header->setSectionResizeMode(n,QHeaderView::Stretch);
 		else if (szMode == "contents")
-		    header->setResizeMode(n,QHeaderView::ResizeToContents);
+		    header->setSectionResizeMode(n,QHeaderView::ResizeToContents);
 		else
-		    header->setResizeMode(n,QHeaderView::Interactive);
+		    header->setSectionResizeMode(n,QHeaderView::Interactive);
 	    }
 	    TelEngine::destruct(id);
 	    TelEngine::destruct(title);
@@ -1383,9 +1383,13 @@ void QtCustomTree::setupItem(QtTreeItem* item)
 	    QSize sz = item->sizeHint(0);
 	    int h = getItemRowHeight(item->type());
 	    if (h > 0)
-		w->setFixedHeight(sz.height() + item->m_heightDelta);
+		w->setFixedHeight(std::max<int>(h,sz.height()) + item->m_heightDelta);
 	    else {
 		sz.setHeight(w->height());
+		// We have no particular width constraint but must ensure that
+		// the size we give as a hint is valid because otherwise it
+		// will be ignored, at least with Qt 5.15.2
+		sz.setWidth(std::max<int>(0,sz.width()));
 		item->setSizeHint(0,sz);
 	    }
 	    setItemWidget(item,0,w);
@@ -1406,6 +1410,10 @@ void QtCustomTree::setItemRowHeight(QTreeWidgetItem* item)
 	return;
     QSize sz = item->sizeHint(0);
     sz.setHeight(h + (static_cast<QtTreeItem*>(item))->m_heightDelta);
+    // We have no particular width constraint but must ensure that the size we
+    // give as a hint is valid because otherwise it will be ignored, at least
+    // with Qt 5.15.2
+    sz.setWidth(std::max<int>(0,sz.width()));
     item->setSizeHint(0,sz);
     QWidget* w = itemWidget(item,0);
     if (w)
@@ -1751,7 +1759,7 @@ QString QtCustomTree::itemsExpStatus()
 void QtCustomTree::setItemsExpStatus(QString s)
 {
     m_expStatus.clear();
-    QStringList list = s.split(",",QString::SkipEmptyParts);
+    QStringList list = s.split(",",Qt::SkipEmptyParts);
     for (int i = 0; i < list.size(); i++) {
 	String id;
 	String value;
@@ -3698,9 +3706,9 @@ QtItemDelegate::QtItemDelegate(QObject* parent, const NamedList& params)
 	if (ns->name() == s_drawfocus)
 	    m_drawFocus = ns->toBoolean();
 	else if (ns->name() == s_columns)
-	    m_columnsStr = QtClient::setUtf8(*ns).split(',',QString::SkipEmptyParts);
+	    m_columnsStr = QtClient::setUtf8(*ns).split(',',Qt::SkipEmptyParts);
 	else if (ns->name() == s_editableCols)
-	    m_editableColsStr = QtClient::setUtf8(*ns).split(',',QString::SkipEmptyParts);
+	    m_editableColsStr = QtClient::setUtf8(*ns).split(',',Qt::SkipEmptyParts);
 	else if (ns->name() == s_noImageRole)
 	    noRoleImage = ns->toBoolean();
 	else if (ns->name() == s_noRoles)
@@ -3764,12 +3772,8 @@ void QtItemDelegate::updateColumns(QStringList& cNames)
 void QtItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
     const QModelIndex& index) const
 {
-    QStyleOptionViewItemV3 opt = setOptions(index,option);
-    const QStyleOptionViewItemV2* v2 = qstyleoption_cast<const QStyleOptionViewItemV2*>(&option);
-    opt.features = v2 ? v2->features : QStyleOptionViewItemV2::ViewItemFeatures(QStyleOptionViewItemV2::None);
-    const QStyleOptionViewItemV3* v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>(&option);
-    opt.locale = v3 ? v3->locale : QLocale();
-    opt.widget = v3 ? v3->widget : 0;
+    QStyleOptionViewItem opt = setOptions(index,option);
+    opt.features = option.features;
     // Prepare painter
     painter->save();
     // Retrieve check
@@ -3778,7 +3782,7 @@ void QtItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
     QVariant checkVar = index.data(Qt::CheckStateRole);
     if (checkVar.isValid()) {
 	checkState = static_cast<Qt::CheckState>(checkVar.toInt());
-	checkRect = check(opt,opt.rect,checkVar);
+	checkRect = doCheck(opt,opt.rect,checkVar);
     }
     // Retrieve image (decoration)
     QPixmap pixmap;
@@ -3816,7 +3820,7 @@ void QtItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
     if (m_roleQtDrawItems != Qt::UserRole) {
 	pVar = index.data(m_roleQtDrawItems);
 	if (pVar.type() == QVariant::UserType) {
-	    QtRefObjectHolder holder = qVariantValue<QtRefObjectHolder>(pVar);
+	    QtRefObjectHolder holder = pVar.value<QtRefObjectHolder>();
 	    extraPaint = static_cast<QtPaintItems*>((RefObject*)holder.m_refObj);
 	}
     }
@@ -3936,7 +3940,7 @@ void QtItemDelegate::drawBackground(QPainter* painter, const QStyleOptionViewIte
 	QItemDelegate::drawBackground(painter,opt,index);
 	return;
     }
-    if (qVariantCanConvert<QBrush>(var)) {
+    if (var.canConvert(QMetaType::QBrush)) {
 	QPointF oldBO = painter->brushOrigin();
 	painter->setBrushOrigin(opt.rect.topLeft());
 	painter->fillRect(opt.rect,qvariant_cast<QBrush>(var));
@@ -4037,7 +4041,7 @@ void* CustomTreeFactory::create(const String& type, const char* name, NamedList*
 	String* wName = params->getParam("parentwidget");
 	QtWindow* wnd = static_cast<QtWindow*>(Client::self()->getWindow(*wndname));
 	if (wnd && !TelEngine::null(wName))
-	    parentWidget = qFindChild<QWidget*>(wnd,QtClient::setUtf8(*wName));
+	    parentWidget = wnd->findChild<QWidget*>(QtClient::setUtf8(*wName));
     }
     if (type == "ContactList")
         return new ContactList(name,*params,parentWidget);

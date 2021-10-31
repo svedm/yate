@@ -11,7 +11,7 @@ HOMEPAGE="http://yate.null.ro/"
 LICENSE="GPL-2"
 
 KEYWORDS="~x86 ~amd64"
-IUSE="doc gsm speex amrnb h323 ilbc mysql postgres ssl zlib qt4 spandsp sctp wanpipe zaptel"
+IUSE="doc gsm speex amrnb h323 ilbc mysql postgres ssl zlib qt5 spandsp sctp wanpipe zaptel"
 
 DEPEND="
 	media-sound/sox
@@ -24,7 +24,7 @@ DEPEND="
 	postgres? ( dev-db/postgresql-base )
 	ssl? ( dev-libs/openssl )
 	zlib? ( sys-libs/zlib )
-	qt4? ( x11-libs/qt-core:4 x11-libs/qt-gui:4 )
+	qt5? ( dev-qt/qtcore:5 dev-qt/qtgui:5 dev-qt/qtnetwork:5 dev-qt/qtwidgets:5 dev-qt/qtxml:5 dev-qt/qtmultimedia:5 dev-qt/designer:5 )
 	spandsp? ( media-libs/spandsp )
 	sctp? ( net/sctp-tools )
 	wanpipe? ( net-misc/wanpipe )
@@ -59,7 +59,7 @@ src_compile()
 		$(use_with postgres libpq /usr) \
 		$(use_with ssl openssl) \
 		$(use_with zlib zlib /usr) \
-		$(use_with qt4 libqt4) \
+		$(use_with qt5 libqt5) \
 		$(use_with spandsp) \
 		${configopts} || die "Configuring failed"
 

@@ -1,11 +1,11 @@
 /**
- * main-qt4.cpp
+ * main-qt5.cpp
  * This file is part of the YATE Project http://YATE.null.ro
  *
- * A Qt-4 based universal telephony client
+ * A Qt-5 based universal telephony client
  *
  * Yet Another Telephony Engine - a fully featured software PBX and IVR
- * Copyright (C) 2004-2014 Null Team
+ * Copyright (C) 2004-2020 Null Team
  *
  * This software is distributed under multiple licenses;
  * see the COPYING file in the main directory for licensing
@@ -20,7 +20,7 @@
  */
 
 #include <yatephone.h>
-#include "qt4/qt4client.h"
+#include "qt5/qt5client.h"
 
 #define WAIT_ENGINE 10000       //wait 10 seconds for engine to halt
 
@@ -83,7 +83,7 @@ static int mainLoop()
 
 extern "C" int main(int argc, const char** argv, const char** envp)
 {
-    TelEngine::Engine::extraPath("qt4");
+    TelEngine::Engine::extraPath("qt5");
     return TelEngine::Engine::main(argc,argv,envp,TelEngine::Engine::Client,&mainLoop);
 }
 /* vi: set ts=8 sw=4 sts=4 noet: */

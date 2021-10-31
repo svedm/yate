@@ -507,35 +507,35 @@ This package includes the common files needed to use Yate as a VoIP client.
 %config(noreplace) %{_sysconfdir}/yate/providers.conf
 
 
-%package qt4
-Summary:	Qt-4 client package for Yate
+%package qt5
+Summary:	Qt-5 client package for Yate
 Group:		Applications/Communication
 Provides:	%{name}-client
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-client-common = %{version}-%{release}
 
-%description qt4
-The yate-qt4 package includes the files needed to use Yate as a VoIP client
-with a Qt version 4 graphical interface.
+%description qt5
+The yate-qt5 package includes the files needed to use Yate as a VoIP client
+with a Qt version 5 graphical interface.
 
-%files qt4
+%files qt5
 %defattr(-, root, root)
-%{_bindir}/yate-qt4
-%{_libdir}/libyateqt4.so.*
-%{_libdir}/yate/qt4/*.yate
-%{_menudir}/yate-qt4.menu
-%{_datadir}/applications/yate-qt4.desktop
-%config(noreplace) %{_sysconfdir}/yate/yate-qt4.conf
+%{_bindir}/yate-qt5
+%{_libdir}/libyateqt5.so.*
+%{_libdir}/yate/qt5/*.yate
+%{_menudir}/yate-qt5.menu
+%{_datadir}/applications/yate-qt5.desktop
+%config(noreplace) %{_sysconfdir}/yate/yate-qt5.conf
 
-%post qt4
+%post qt5
 test -x /usr/bin/update-menus && /usr/bin/update-menus || /bin/true
 
-%postun qt4
+%postun qt5
 test -x /usr/bin/update-menus && /usr/bin/update-menus || /bin/true
 
 %define conf_gui %{nil}
 %else
-%define conf_gui --without-libqt4
+%define conf_gui --without-libqt5
 %endif
 
 
@@ -617,7 +617,7 @@ Requires:	%{name}-zlib = %{version}-%{release}
 Requires:	%{name}-mysql = %{version}-%{release}
 Requires:	%{name}-pgsql = %{version}-%{release}
 %if "%{no_gui}" != "1"
-Requires:	%{name}-qt4 = %{version}-%{release}
+Requires:	%{name}-qt5 = %{version}-%{release}
 %endif
 Requires:	%{name}-scripts = %{version}-%{release}
 

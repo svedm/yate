@@ -23,7 +23,7 @@
 enabled=true
 visible=true
 mainwindow=true
-description=qt4client.ui
+description=qt5client.ui
 
 [settings]
 enabled=yes

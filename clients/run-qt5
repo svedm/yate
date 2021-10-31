@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# run-qt4
+# run-qt5
 # This file is part of the YATE Project http://YATE.null.ro
 #
 # Yet Another Telephony Engine - a fully featured software PBX and IVR
-# Copyright (C) 2005-2014 Null Team
+# Copyright (C) 2005-2020 Null Team
 #
 # This software is distributed under multiple licenses;
 # see the COPYING file in the main directory for licensing
@@ -18,12 +18,12 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
-# Script to run the Qt4 client from the build directory
+# Script to run the Qt5 client from the build directory
 
-if [ -x yate-qt4 -a -x ../run ]; then
+if [ -x yate-qt5 -a -x ../run ]; then
     # Need to put the path to extra Qt/KDE libraries here
     # export LD_LIBRARY_PATH=
-    cd ..; exec ./run --executable clients/yate-qt4 "$@"
+    cd ..; exec ./run --executable clients/yate-qt5 "$@"
 else
     echo "Could not find client executable or run script" >&2
 fi

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="Qt4Client"
+	Name="Qt5Client"
 	ProjectGUID="{E91387A2-D00D-6BF1-A230-44C8070A985F}"
-	RootNamespace="Qt4Client"
+	RootNamespace="Qt5Client"
 	>
 	<Platforms>
 		<Platform
@@ -42,19 +42,19 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/Qt4Client.tlb"
+				TypeLibraryName=".\Release/Qt5Client.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".,..,../clients/qt4"
+				AdditionalIncludeDirectories=".,..,../clients/qt5"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;UNICODE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/Qt4Client.pch"
+				PrecompiledHeaderFile=".\Release/Qt5Client.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -74,10 +74,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="Release/yate-qt4.exe"
+				OutputFile="Release/yate-qt5.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/yate-qt4.pdb"
+				ProgramDatabaseFile=".\Release/yate-qt5.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"
@@ -94,7 +94,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/Qt4Client.bsc"
+				OutputFile=".\Release/Qt5Client.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -137,18 +137,18 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/Qt4Client.tlb"
+				TypeLibraryName=".\Debug/Qt5Client.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,..,../clients/qt4"
+				AdditionalIncludeDirectories=".,..,../clients/qt5"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;UNICODE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\Debug/Qt4Client.pch"
+				PrecompiledHeaderFile=".\Debug/Qt5Client.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -169,11 +169,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="Debug/yate-qt4.exe"
+				OutputFile="Debug/yate-qt5.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/yate-qt4.pdb"
+				ProgramDatabaseFile=".\Debug/yate-qt5.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"
@@ -190,7 +190,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/Qt4Client.bsc"
+				OutputFile=".\Debug/Qt5Client.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -214,7 +214,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\clients\main-qt4.cpp"
+				RelativePath="..\clients\main-qt5.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"

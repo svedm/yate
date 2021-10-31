@@ -1,33 +1,33 @@
 # Makefile
-# This file holds the make rules for the Gtk2 client support
+# This file holds the make rules for the Qt5 client support
 
 # override DEBUG at compile time to enable full debug or remove it all
 DEBUG :=
 
 CXX := @CXX@ -Wall
 AR  := ar
-MOC := @QT4_MOC@
-QT4_INC := @QT4_INC@
-QT4_LIB := @QT4_LIB@
-QT4_INC_NET := @QT4_INC_NET@
-QT4_LIB_NET := @QT4_LIB_NET@
+MOC := @QT5_MOC@
+QT5_INC := @QT5_INC@
+QT5_LIB := @QT5_LIB@
+QT5_INC_NET := @QT5_INC_NET@
+QT5_LIB_NET := @QT5_LIB_NET@
 DEFS:=
 
-INCLUDES:=-I. -I@srcdir@ -I@top_srcdir@ $(QT4_INC)
+INCLUDES:=-I. -I@srcdir@ -I@top_srcdir@ $(QT5_INC)
 CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 LDFLAGS:= @LDFLAGS@
 SONAME_OPT := @SONAME_OPT@
 YATELIBS := -L../.. -lyate @LIBS@
-INCFILES := @top_srcdir@/yateclass.h @top_srcdir@/yatecbase.h @srcdir@/qt4client.h
+INCFILES := @top_srcdir@/yateclass.h @top_srcdir@/yatecbase.h @srcdir@/qt5client.h
 
 PROGS=
-LIBS = qt4client.a
-SOURCES = qt4client.cpp
-OBJS = $(SOURCES:.cpp=.o) qt4client.moc.o
+LIBS = qt5client.a
+SOURCES = qt5client.cpp
+OBJS = $(SOURCES:.cpp=.o) qt5client.moc.o
 INST:=
-LIBD_DEV:= libyateqt4.so
+LIBD_DEV:= libyateqt5.so
 LIBD_VER:= $(LIBD_DEV).@PACKAGE_VERSION@
-ifeq (@QT4_STATIC_MODULES@,no)
+ifeq (@QT5_STATIC_MODULES@,no)
 LIBD:= ../../$(LIBD_VER) ../../$(LIBD_DEV)
 INST:= $(LIBD_VER) $(LIBD_DEV)
 endif
@@ -37,8 +37,8 @@ LOCALLIBS =
 COMPILE = $(CXX) $(DEFS) $(DEBUG) $(INCLUDES) $(CFLAGS)
 LINK = $(CXX) $(LDFLAGS)
 
-ifneq (x@QT4_VER@,x)
-DEFS := $(DEFS) -DQT4_VER=@QT4_VER@
+ifneq (x@QT5_VER@,x)
+DEFS := $(DEFS) -DQT5_VER=@QT5_VER@
 endif
 
 prefix = @prefix@
@@ -85,7 +85,7 @@ install: all
 	    fi \
 	done; \
 	mkdir -p "$(DESTDIR)$(incdir)" && \
-	install -m 0644 @srcdir@/qt4client.h "$(DESTDIR)$(incdir)/" \
+	install -m 0644 @srcdir@/qt5client.h "$(DESTDIR)$(incdir)/" \
 	)
 
 uninstall:
@@ -93,7 +93,7 @@ uninstall:
 	@-for i in $(INST) ; do \
 	    rm "$(DESTDIR)$(libdir)/$$i" ; \
 	done; \
-	rm "$(DESTDIR)$(incdir)/qt4client.h" && rmdir "$(DESTDIR)$(libdir)" \
+	rm "$(DESTDIR)$(incdir)/qt5client.h" && rmdir "$(DESTDIR)$(libdir)" \
 	)
 
 %.o: @srcdir@/%.cpp $(INCFILES)
@@ -109,7 +109,7 @@ Makefile: @srcdir@/Makefile.in ../../config.status
 	cd ../.. && ./config.status
 
 ../../$(LIBD_VER): $(OBJS)
-	$(LINK) -o $@ $(SONAME_OPT)$(LIBD_VER) $^ $(QT4_LIB) $(YATELIBS)
+	$(LINK) -o $@ $(SONAME_OPT)$(LIBD_VER) $^ $(YATELIBS) $(QT5_LIB)
 
 ../../$(LIBD_DEV): ../../$(LIBD_VER)
 	cd ../.. && ln -sf $(LIBD_VER) $(LIBD_DEV)

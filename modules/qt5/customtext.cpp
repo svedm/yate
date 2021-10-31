@@ -5,7 +5,7 @@
  * Custom text edit objects
  *
  * Yet Another Telephony Engine - a fully featured software PBX and IVR
- * Copyright (C) 2010-2014 Null Team
+ * Copyright (C) 2010-2020 Null Team
  *
  * This software is distributed under multiple licenses;
  * see the COPYING file in the main directory for licensing
@@ -597,7 +597,7 @@ void* CustomTextFactory::create(const String& type, const char* name, NamedList*
 	String* wName = params->getParam("parentwidget");
 	QtWindow* wnd = static_cast<QtWindow*>(Client::self()->getWindow(*wndname));
 	if (wnd && !TelEngine::null(wName))
-	    parentWidget = qFindChild<QWidget*>(wnd,QtClient::setUtf8(*wName));
+	    parentWidget = wnd->findChild<QWidget*>(QtClient::setUtf8(*wName));
     }
     if (type == "CustomTextEdit")
 	return new CustomTextEdit(name,*params,parentWidget);

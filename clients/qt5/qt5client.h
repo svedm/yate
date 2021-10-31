@@ -1,11 +1,11 @@
 /**
- * qt4client.h
+ * qt5client.h
  * This file is part of the YATE Project http://YATE.null.ro
  *
- * A Qt-4 based universal telephony client
+ * A Qt-5 based universal telephony client
  *
  * Yet Another Telephony Engine - a fully featured software PBX and IVR
- * Copyright (C) 2004-2014 Null Team
+ * Copyright (C) 2004-2020 Null Team
  *
  * This software is distributed under multiple licenses;
  * see the COPYING file in the main directory for licensing
@@ -19,25 +19,25 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#ifndef __QT4CLIENT_H
-#define __QT4CLIENT_H
+#ifndef __QT5CLIENT_H
+#define __QT5CLIENT_H
 
 #include <yatecbase.h>
 
 #ifdef _WINDOWS
 
-#ifdef LIBYQT4_EXPORTS
-#define YQT4_API __declspec(dllexport)
+#ifdef LIBYQT5_EXPORTS
+#define YQT5_API __declspec(dllexport)
 #else
-#ifndef LIBYQT4_STATIC
-#define YQT4_API __declspec(dllimport)
+#ifndef LIBYQT5_STATIC
+#define YQT5_API __declspec(dllimport)
 #endif
 #endif
 
 #endif /* _WINDOWS */
 
-#ifndef YQT4_API
-#define YQT4_API
+#ifndef YQT5_API
+#define YQT5_API
 #endif
 
 #undef open
@@ -55,8 +55,9 @@
 #define QT_CORE_LIB
 #define QT_THREAD_SUPPORT
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QSound>
+#include <QAudioDeviceInfo>
 
 namespace TelEngine {
 
@@ -88,7 +89,7 @@ class QtBusyWidget;                      // Busy widget to show over controls
  * A QObject holding a RefPointer. Suitable to be set in QVariant
  * @short A QObject holding a RefPointer
  */
-class YQT4_API QtRefObjectHolder : public QObject
+class YQT5_API QtRefObjectHolder : public QObject
 {
     Q_CLASSINFO("QtRefObjectHolder","Yate")
     Q_OBJECT
@@ -124,7 +125,7 @@ public:
     static inline QVariant setVariant(RefObject* obj, bool force = false) {
 	    QtRefObjectHolder data(obj);
 	    if (data.m_refObj)
-		return qVariantFromValue(data);
+		return QVariant::fromValue(data);
 	    return QVariant();
 	}
 
@@ -135,7 +136,7 @@ public:
  * Proxy to global QT events
  * @short A QT proxy class
  */
-class YQT4_API QtEventProxy : public QObject, public GenObject
+class YQT5_API QtEventProxy : public QObject, public GenObject
 {
     YCLASS(QtEventProxy,GenObject)
     Q_CLASSINFO("QtEventProxy","Yate")
@@ -173,7 +174,7 @@ private:
  * This class holds data used to build an url
  * @short QUrl builder
  */
-class YQT4_API QtUrlBuilder : public QObject, public GenObject
+class YQT5_API QtUrlBuilder : public QObject, public GenObject
 {
     YCLASS(QtUrlBuilder,GenObject)
     Q_CLASSINFO("QtUrlBuilder","Yate")
@@ -204,7 +205,7 @@ protected:
     ObjList* m_queryParams;
 };
 
-class YQT4_API QtClient : public Client
+class YQT5_API QtClient : public Client
 {
     friend class QtWindow;
 public:
@@ -765,7 +766,7 @@ private:
     ObjList m_events;                    // Proxy events objects
 };
 
-class YQT4_API QtDriver : public ClientDriver
+class YQT5_API QtDriver : public ClientDriver
 {
 public:
     QtDriver(bool buildClientThread = true);
@@ -776,7 +777,7 @@ private:
     bool m_clientThread;                 // does the client need a thread to run on?
 };
 
-class YQT4_API QtWindow : public QWidget, public Window
+class YQT5_API QtWindow : public QWidget, public Window
 {
     YCLASS(QtWindow, Window)
     Q_CLASSINFO("QtWindow", "Yate")
@@ -1108,7 +1109,7 @@ protected:
  * The dialog will delete itself if an action is handled
  * @short A custom modal dialog
  */
-class YQT4_API QtDialog : public QDialog
+class YQT5_API QtDialog : public QDialog
 {
     Q_CLASSINFO("QtDialog","Yate")
     Q_OBJECT
@@ -1213,7 +1214,7 @@ public:
  * This class holds a basic widget container with functions to rename children
  * @short A widget container
  */
-class YQT4_API QtUIWidget : public UIWidget
+class YQT5_API QtUIWidget : public UIWidget
 {
     YCLASS(QtUIWidget,UIWidget)
 public:
@@ -1278,7 +1279,7 @@ public:
 	    if (list.size() != 1)
 		m_saveProps = list;
 	    else
-		m_saveProps = list[0].split(QChar(','),QString::SkipEmptyParts);
+		m_saveProps = list[0].split(QChar(','),Qt::SkipEmptyParts);
 	}
 
     /**
@@ -1647,7 +1648,7 @@ protected:
  * This class encapsulates a custom QT object
  * @short A custom QT object
  */
-class YQT4_API QtCustomObject : public QObject, public QtUIWidget
+class YQT5_API QtCustomObject : public QObject, public QtUIWidget
 {
     YCLASS(QtCustomObject,QtUIWidget)
     Q_CLASSINFO("QtCustomObject","Yate")
@@ -1683,7 +1684,7 @@ private:
  * This class encapsulates a custom QT widget
  * @short A custom QT widget
  */
-class YQT4_API QtCustomWidget : public QWidget, public QtUIWidget
+class YQT5_API QtCustomWidget : public QWidget, public QtUIWidget
 {
     YCLASS(QtCustomWidget,QtUIWidget)
     Q_CLASSINFO("QtCustomWidget","Yate")
@@ -1725,7 +1726,7 @@ private:
  * This class encapsulates a custom QT table
  * @short A custom QT table widget
  */
-class YQT4_API QtTable : public QTableWidget, public QtUIWidget
+class YQT5_API QtTable : public QTableWidget, public QtUIWidget
 {
     YCLASS(QtTable,QtUIWidget)
     Q_CLASSINFO("QtTable","Yate")
@@ -1767,7 +1768,7 @@ private:
  * This class encapsulates a custom QT tree
  * @short A custom QT tree widget
  */
-class YQT4_API QtTree : public QTreeWidget, public QtUIWidget
+class YQT5_API QtTree : public QTreeWidget, public QtUIWidget
 {
     YCLASS(QtTree,QtUIWidget)
     Q_CLASSINFO("QtTree","Yate")
@@ -1809,7 +1810,7 @@ private:
  * QT specific sound
  * @short A QT client sound
  */
-class YQT4_API QtSound : public ClientSound
+class YQT5_API QtSound : public ClientSound
 {
     YCLASS(QtSound,ClientSound)
 public:
@@ -1834,7 +1835,7 @@ private:
 /**
  * @short Base class for Drag&Drop operations
  */
-class YQT4_API QtDragAndDrop : public QObject, public GenObject
+class YQT5_API QtDragAndDrop : public QObject, public GenObject
 {
     YCLASS(QtDragAndDrop,GenObject)
     Q_CLASSINFO("QtDragAndDrop","Yate")
@@ -1886,7 +1887,7 @@ protected:
  * This class holds data used for Drop operation
  * @short Drop data holder
  */
-class YQT4_API QtDrop : public QtDragAndDrop
+class YQT5_API QtDrop : public QtDragAndDrop
 {
     YCLASS(QtDrop,QtDragAndDrop)
     Q_CLASSINFO("QtDrop","Yate")
@@ -1944,7 +1945,7 @@ protected:
  * This class holds data used for Drop operation on widgets displaying a list of items
  * @short Drop data holder for widget list items
  */
-class YQT4_API QtListDrop : public QtDrop
+class YQT5_API QtListDrop : public QtDrop
 {
     YCLASS(QtListDrop,QtDrop)
     Q_CLASSINFO("QtListDrop","Yate")
@@ -2007,7 +2008,7 @@ protected:
  * Busy widget to show over controls
  * @short Busy widget to show over controls
  */
-class YQT4_API QtBusyWidget : public QtCustomWidget
+class YQT5_API QtBusyWidget : public QtCustomWidget
 {
     YCLASS(QtBusyWidget,QtCustomWidget)
     Q_CLASSINFO("QtBusyWidget","Yate")
@@ -2056,8 +2057,8 @@ public:
      * @param on True to show, false to hide
      */
     static inline bool showBusyChild(QWidget* target, bool on) {
-	    QtBusyWidget* w = target ? qFindChild<QtBusyWidget*>(
-		target,target->objectName() + s_busySuffix) : 0;
+	    QtBusyWidget* w = target ? target->findChild<QtBusyWidget*>(
+		target->objectName() + s_busySuffix) : 0;
 	    if (!w)
 		return false;
 	    w->showBusy(on);
@@ -2109,6 +2110,6 @@ private:
 
 Q_DECLARE_METATYPE(TelEngine::QtRefObjectHolder)
 
-#endif // __QT4CLIENT_H
+#endif // __QT5CLIENT_H
 
 /* vi: set ts=8 sw=4 sts=4 noet: */

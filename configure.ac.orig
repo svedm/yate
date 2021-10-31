@@ -1597,44 +1597,44 @@ AC_SUBST(LIBUSB_INC)
 AC_SUBST(LIBUSB_LIB)
 
 
-HAVE_QT5=no
-QT5_INC=""
-QT5_LIB=""
-QT5_INC_NET=""
-QT5_LIB_NET=""
-QT5_MOC=""
-QT5_VER=""
-QT5_STATIC_MODULES=""
-AC_ARG_WITH(libqt5,AC_HELP_STRING([--with-libqt5],[use Qt for graphical clients (default)]),[ac_cv_use_libqt5=$withval],[ac_cv_use_libqt5=yes])
+HAVE_QT4=no
+QT4_INC=""
+QT4_LIB=""
+QT4_INC_NET=""
+QT4_LIB_NET=""
+QT4_MOC=""
+QT4_VER=""
+QT4_STATIC_MODULES=""
+AC_ARG_WITH(libqt4,AC_HELP_STRING([--with-libqt4],[use Qt for graphical clients (default)]),[ac_cv_use_libqt4=$withval],[ac_cv_use_libqt4=yes])
 AC_ARG_WITH(qtstatic,AC_HELP_STRING([--with-qtstatic=MODULES],[link specific modules with static Qt]),[ac_cv_use_qtstatic=$withval],[ac_cv_use_qtstatic=no])
 qtstatic=""
 if [[ "x$ac_cv_use_qtstatic" != "xno" ]]; then
     qtstatic="--static"
 fi
-QT5_STATIC_MODULES=`echo "$ac_cv_use_qtstatic" | sed 's/,/ /g'`
-if [[ "x$ac_cv_use_libqt5" = "xyes" ]]; then
-    AC_MSG_CHECKING([for Qt5 >= 5.0.0 using pkg-config])
-    pkgd="/usr/lib/qt5/$ARCHLIB/pkgconfig"
+QT4_STATIC_MODULES=`echo "$ac_cv_use_qtstatic" | sed 's/,/ /g'`
+if [[ "x$ac_cv_use_libqt4" = "xyes" ]]; then
+    AC_MSG_CHECKING([for Qt4 >= 4.3.0 using pkg-config])
+    pkgd="/usr/lib/qt4/$ARCHLIB/pkgconfig"
     verqt=`(pkg-config --modversion QtCore) 2>/dev/null`
     if [[ -z "$verqt" -a -d "$pkgd" ]]; then
 	export PKG_CONFIG_LIBDIR="$pkgd"
 	verqt=`(pkg-config --modversion QtCore) 2>/dev/null`
     fi
-    incqt=`(pkg-config --cflags QtNetwork QtGui QtWidgets QtXml QtMultimedia QtCore) 2>/dev/null | sed 's/QtNetwork/QtUiTools/'`
-    libqt=`(pkg-config --libs $qtstatic QtNetwork QtGui QtWidgets QtXml QtMultimedia QtCore) 2>/dev/null | sed 's/QtNetwork/QtUiTools/'`
+    incqt=`(pkg-config --cflags QtNetwork QtGui QtXml QtCore) 2>/dev/null | sed 's/QtNetwork/QtUiTools/'`
+    libqt=`(pkg-config --libs $qtstatic QtNetwork QtGui QtXml QtCore) 2>/dev/null | sed 's/QtNetwork/QtUiTools/'`
     if [[ "x$incqt" != "x" -a "x$libqt" != "x" ]]; then
-	HAVE_QT5=yes
-	QT5_INC="$incqt"
-	QT5_LIB="$libqt"
-	QT5_INC_NET=`(pkg-config --cflags QtNetwork) 2>/dev/null | grep -o '[[^ ]]*QtNetwork[[^ ]]*'`
-	QT5_LIB_NET=`(pkg-config --libs QtNetwork) 2>/dev/null | grep -o '[[^ ]]*QtNetwork[[^ ]]*'`
-	QT5_MOC=`echo "$incqt" | sed -n 's,^.*-I\([[^ ]]\+\)/include .*$,\1/bin/moc,p'`
-	test -z "$QT5_MOC" && QT5_MOC=`(which moc-qt5) 2>/dev/null`
-	test -z "$QT5_MOC" && QT5_MOC="moc"
-	QT5_VER=`echo "$verqt" | $csed "$vsed" | $csed "$vsed" | sed 's/\(..\)\.\(..\)\.\(..\)/\1\2\3/'`
+	HAVE_QT4=yes
+	QT4_INC="$incqt"
+	QT4_LIB="$libqt"
+	QT4_INC_NET=`(pkg-config --cflags QtNetwork) 2>/dev/null | grep -o '[[^ ]]*QtNetwork[[^ ]]*'`
+	QT4_LIB_NET=`(pkg-config --libs QtNetwork) 2>/dev/null | grep -o '[[^ ]]*QtNetwork[[^ ]]*'`
+	QT4_MOC=`echo "$incqt" | sed -n 's,^.*-I\([[^ ]]\+\)/include .*$,\1/bin/moc,p'`
+	test -z "$QT4_MOC" && QT4_MOC=`(which moc-qt4) 2>/dev/null`
+	test -z "$QT4_MOC" && QT4_MOC="moc"
+	QT4_VER=`echo "$verqt" | $csed "$vsed" | $csed "$vsed" | sed 's/\(..\)\.\(..\)\.\(..\)/\1\2\3/'`
 	ac_cv_use_libqt="no"
-	if [[ 1$QT5_VER -lt 1040300 ]]; then
-	    HAVE_QT5=no
+	if [[ 1$QT4_VER -lt 1040300 ]]; then
+	    HAVE_QT4=no
 	    verqt="too old ($verqt)"
 	fi
     else
@@ -1643,8 +1643,8 @@ if [[ "x$ac_cv_use_libqt5" = "xyes" ]]; then
     unset PKG_CONFIG_LIBDIR
     AC_MSG_RESULT([$verqt])
 
-    if [[ "x$HAVE_QT5" = "xno" ]]; then
-	AC_MSG_CHECKING([for Qt5 >= 5.0.0 using qmake])
+    if [[ "x$HAVE_QT4" = "xno" ]]; then
+	AC_MSG_CHECKING([for Qt4 >= 4.3.0 using qmake])
 	incqt=`(qmake -query QT_INSTALL_HEADERS) 2>/dev/null`
 	libqt=`(qmake -query QT_INSTALL_LIBS) 2>/dev/null`
 	if [[ "x$incqt" = "x**Unknown**" -o "x$libqt" = "x**Unknown**" ]]; then
@@ -1652,33 +1652,33 @@ if [[ "x$ac_cv_use_libqt5" = "xyes" ]]; then
 	    libqt=""
 	fi
 	if [[ "x$incqt" != "x" -a "x$libqt" != "x" ]]; then
-	    HAVE_QT5=yes
-	    QT5_INC="-I$incqt -I$incqt/QtUiTools -I$incqt/QtGui -I$incqt/QtWidgets -I$incqt/QtXml -I$incqt/QtMultimedia -I$incqt/QtCore"
+	    HAVE_QT4=yes
+	    QT4_INC="-I$incqt -I$incqt/QtUiTools -I$incqt/QtGui -I$incqt/QtXml -I$incqt/QtCore"
 	    case "$uname_os" in
 		*Darwin)
-		    QT5_INC="-D__USE_WS_X11__ $QT5_INC"
+		    QT4_INC="-D__USE_WS_X11__ $QT4_INC"
 		    ;;
 	    esac
-	    QT5_LIB="-L$libqt -lQt5UiTools -lQt5Gui -lQt5Widgets -lQt5Xml -lQt5Multimedia -lQt5Core"
-	    QT5_INC_NET="-I$incqt/QtNetwork"
-	    QT5_LIB_NET="-L$libqt -lQt5Network"
+	    QT4_LIB="-L$libqt -lQtUiTools -lQtGui -lQtXml -lQtCore"
+	    QT4_INC_NET="-I$incqt/QtNetwork"
+	    QT4_LIB_NET="-L$libqt -lQtNetwork"
 	    case "$uname_os" in
 		*Darwin)
 		    framework=`(ls "$libqt" | grep QtGui.framework) 2>/dev/null`
 		    if [[ "x$framework" != "x" ]]; then
-			QT5_INC="-I$incqt  -I$incqt/QtUiTools -I$libqt/QtGui.framework/Headers -I$libqt/QtXml.framework/Headers -I$libqt/QtCore.framework/Headers"
-			QT5_LIB="-L$libqt -F$libqt -lQtUiTools -framework QtGui -framework QtXml -framework QtCore"
-			QT5_INC_NET="-I$libqt/QtNetwork.framework/Headers"
-			QT5_LIB_NET="-framework QtNetwork"
+			QT4_INC="-I$incqt  -I$incqt/QtUiTools -I$libqt/QtGui.framework/Headers -I$libqt/QtXml.framework/Headers -I$libqt/QtCore.framework/Headers"
+			QT4_LIB="-L$libqt -F$libqt -lQtUiTools -framework QtGui -framework QtXml -framework QtCore"
+			QT4_INC_NET="-I$libqt/QtNetwork.framework/Headers"
+			QT4_LIB_NET="-framework QtNetwork"
 		    fi
 		    ;;
 	    esac
-	    QT5_MOC=`(qmake -query QT_INSTALL_BINS) 2>/dev/null`
-	    QT5_MOC="$QT5_MOC/moc"
+	    QT4_MOC=`(qmake -query QT_INSTALL_BINS) 2>/dev/null`
+	    QT4_MOC="$QT4_MOC/moc"
 	    verqt=`(qmake -query QT_VERSION) 2>/dev/null`
-	    QT5_VER=`echo "$verqt" | $csed "$vsed" | $csed "$vsed" | sed 's/\(..\)\.\(..\)\.\(..\)/\1\2\3/'`
-	    if [[ 1$QT5_VER -lt 1050000 ]]; then
-	    	HAVE_QT5=no
+	    QT4_VER=`echo "$verqt" | $csed "$vsed" | $csed "$vsed" | sed 's/\(..\)\.\(..\)\.\(..\)/\1\2\3/'`
+	    if [[ 1$QT4_VER -lt 1040300 ]]; then
+	    	HAVE_QT4=no
 	    	verqt="too old ($verqt)"
 	   fi
 	else
@@ -1688,14 +1688,14 @@ if [[ "x$ac_cv_use_libqt5" = "xyes" ]]; then
     fi
 fi
 
-AC_SUBST(HAVE_QT5)
-AC_SUBST(QT5_INC)
-AC_SUBST(QT5_LIB)
-AC_SUBST(QT5_INC_NET)
-AC_SUBST(QT5_LIB_NET)
-AC_SUBST(QT5_MOC)
-AC_SUBST(QT5_VER)
-AC_SUBST(QT5_STATIC_MODULES)
+AC_SUBST(HAVE_QT4)
+AC_SUBST(QT4_INC)
+AC_SUBST(QT4_LIB)
+AC_SUBST(QT4_INC_NET)
+AC_SUBST(QT4_LIB_NET)
+AC_SUBST(QT4_MOC)
+AC_SUBST(QT4_VER)
+AC_SUBST(QT4_STATIC_MODULES)
 
 
 HAVE_MALLINFO=no
@@ -1871,7 +1871,7 @@ AC_CONFIG_FILES([packing/rpm/yate.spec
                  modules/Makefile
                  modules/test/Makefile
                  clients/Makefile
-                 clients/qt5/Makefile
+                 clients/qt4/Makefile
                  libs/ilbc/Makefile
                  libs/ysip/Makefile
                  libs/yrtp/Makefile

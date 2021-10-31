@@ -75,8 +75,8 @@ Source: "Release\libyjabber.dll"; DestDir: "{app}"; Flags: replacesameversion; C
 Source: "Release\libymgcp.dll"; DestDir: "{app}"; Flags: replacesameversion; Components: server\pstn server\cluster
 Source: "Release\libysig.dll"; DestDir: "{app}"; Flags: replacesameversion; Components: server\pstn server\cluster
 Source: "Release\libyscript.dll"; DestDir: "{app}"; Flags: replacesameversion; Components: client server
-Source: "Release\libyqt4.dll"; DestDir: "{app}"; Flags: replacesameversion; Components: client\qt
-Source: "Release\yate-qt4.exe"; DestDir: "{app}"; Flags: replacesameversion; Components: client\qt
+Source: "Release\libyqt5.dll"; DestDir: "{app}"; Flags: replacesameversion; Components: client\qt
+Source: "Release\yate-qt5.exe"; DestDir: "{app}"; Flags: replacesameversion; Components: client\qt
 Source: "Runtimes\qtcore4.dll"; DestDir: "{app}"; Components: client\qt\run
 Source: "Runtimes\qtgui4.dll"; DestDir: "{app}"; Components: client\qt\run
 Source: "Runtimes\qtxml4.dll"; DestDir: "{app}"; Components: client\qt\run
@@ -132,11 +132,11 @@ Source: "Release\server\ccongestion.yate"; DestDir: "{app}\modules\server"; Flag
 Source: "Release\server\monitoring.yate"; DestDir: "{app}\modules\server"; Flags: replacesameversion; Components: server\monitor
 Source: "Release\server\ysnmpagent.yate"; DestDir: "{app}\modules\server"; Flags: replacesameversion; Components: server\monitor
 Source: "Release\sip\sip_cnam_lnp.yate"; DestDir: "{app}\modules\sip"; Flags: replacesameversion; Components: server
-Source: "Release\qt4\clientarchive.yate"; DestDir: "{app}\modules\qt4"; Flags: replacesameversion; Components: client\qt
-Source: "Release\qt4\customtable.yate"; DestDir: "{app}\modules\qt4"; Flags: replacesameversion; Components: client\qt
-Source: "Release\qt4\customtree.yate"; DestDir: "{app}\modules\qt4"; Flags: replacesameversion; Components: client\qt
-Source: "Release\qt4\customtext.yate"; DestDir: "{app}\modules\qt4"; Flags: replacesameversion; Components: client\qt
-Source: "Release\qt4\widgetlist.yate"; DestDir: "{app}\modules\qt4"; Flags: replacesameversion; Components: client\qt
+Source: "Release\qt5\clientarchive.yate"; DestDir: "{app}\modules\qt5"; Flags: replacesameversion; Components: client\qt
+Source: "Release\qt5\customtable.yate"; DestDir: "{app}\modules\qt5"; Flags: replacesameversion; Components: client\qt
+Source: "Release\qt5\customtree.yate"; DestDir: "{app}\modules\qt5"; Flags: replacesameversion; Components: client\qt
+Source: "Release\qt5\customtext.yate"; DestDir: "{app}\modules\qt5"; Flags: replacesameversion; Components: client\qt
+Source: "Release\qt5\widgetlist.yate"; DestDir: "{app}\modules\qt5"; Flags: replacesameversion; Components: client\qt
 Source: "Release\javascript.yate"; DestDir: "{app}\modules"; Flags: replacesameversion; Components: client server
 Source: "Release\server\eventlogs.yate"; DestDir: "{app}\modules\server"; Flags: replacesameversion; Components: server
 
@@ -195,13 +195,13 @@ Source: "..\share\help\*.yhlp"; DestDir: "{app}\share\help"; Components: client
 Source: "..\share\sounds\*.wav"; DestDir: "{app}\share\sounds"; Components: client
 Source: "..\share\sounds\*.au"; DestDir: "{app}\share\sounds"; Components: client
 Source: "..\conf.d\providers.conf.default"; DestName: "providers.conf"; DestDir: "{app}\conf.d"; Components: client
-Source: "..\share\skins\default\qt4client.rc"; DestDir: "{app}\share\skins\default"; Components: client\qt
+Source: "..\share\skins\default\qt5client.rc"; DestDir: "{app}\share\skins\default"; Components: client\qt
 Source: "..\share\skins\default\*.ui"; DestDir: "{app}\share\skins\default"; Components: client\qt
 Source: "..\share\skins\default\*.png"; DestDir: "{app}\share\skins\default"; Components: client
 Source: "..\share\skins\default\*.gif"; DestDir: "{app}\share\skins\default"; Components: client
 Source: "..\share\skins\default\*.css"; DestDir: "{app}\share\skins\default"; Components: client
 
-Source: "..\conf.d\yate-qt4.conf.default"; DestName: "yate-qt4.conf"; DestDir: "{app}\conf.d"; Components: client\qt; Flags: skipifsourcedoesntexist
+Source: "..\conf.d\yate-qt5.conf.default"; DestName: "yate-qt5.conf"; DestDir: "{app}\conf.d"; Components: client\qt; Flags: skipifsourcedoesntexist
 
 Source: "..\share\data\*.txt"; DestDir: "{app}\share\data"; Components: server
 Source: "..\share\data\*.conf"; DestDir: "{app}\share\data"; Components: server
@@ -213,8 +213,8 @@ Source: "Release\libyate.lib"; DestDir: "{app}\devel"; Components: devel
 Source: "..\yate*.h"; DestDir: "{app}\devel"; Components: devel
 Source: "yateversn.h"; DestDir: "{app}\devel"; Components: devel
 Source: "version.rc"; DestDir: "{app}\devel"; Components: devel
-Source: "..\clients\qt4\qt4client.h"; DestDir: "{app}\devel"; Components: devel
-Source: "Release\libyqt4.lib"; DestDir: "{app}\devel"; Components: devel
+Source: "..\clients\qt5\qt5client.h"; DestDir: "{app}\devel"; Components: devel
+Source: "Release\libyqt5.lib"; DestDir: "{app}\devel"; Components: devel
 Source: "..\README"; DestName: "README.txt"; DestDir: "{app}\devel"; Components: devel
 Source: "..\ChangeLog"; DestName: "ChangeLog.txt"; DestDir: "{app}\devel"; Components: devel
 Source: "..\docs\*.html"; DestDir: "{app}\devel\docs"; Components: devel\doc
@@ -231,20 +231,20 @@ Source: "Runtimes\msvcr80.dll"; DestDir: "{app}"; Flags: skipifsourcedoesntexist
 Source: "Runtimes\msvcp80.dll"; DestDir: "{app}"; Flags: skipifsourcedoesntexist; Check: CrtLocalInstall
 
 [Icons]
-Name: "{group}\Yate Client (Qt)"; Filename: "{app}\yate-qt4.exe"; Parameters: "-n yate-qt4 -w ""{app}"""; Components: client\qt
+Name: "{group}\Yate Client (Qt)"; Filename: "{app}\yate-qt5.exe"; Parameters: "-n yate-qt5 -w ""{app}"""; Components: client\qt
 Name: "{group}\Yate Console"; Filename: "{app}\yate-console.exe"; Parameters: "-n yate-console -w ""{app}"""; Components: debug
 Name: "{group}\Register Service"; Filename: "{app}\yate-service.exe"; Parameters: "--install -w ""{app}"""; Components: server
 Name: "{group}\Unregister Service"; Filename: "{app}\yate-service.exe"; Parameters: "--remove"; Components: server
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{group}\Yate Web Site"; Filename: "{app}\yate.url"
 Name: "{group}\Developer docs"; Filename: "{app}\devel\docs\index.html"; Components: devel\doc
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\Yate Client (Qt)"; Filename: "{app}\yate-qt4.exe"; Parameters: "-n yate-qt4 -w ""{app}"""; Components: client\qt; Tasks: qlaunch
-Name: "{userdesktop}\Yate Client (Qt)"; Filename: "{app}\yate-qt4.exe"; Parameters: "-n yate-qt4 -w ""{app}"""; Components: client\qt; Tasks: desktop
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\Yate Client (Qt)"; Filename: "{app}\yate-qt5.exe"; Parameters: "-n yate-qt5 -w ""{app}"""; Components: client\qt; Tasks: qlaunch
+Name: "{userdesktop}\Yate Client (Qt)"; Filename: "{app}\yate-qt5.exe"; Parameters: "-n yate-qt5 -w ""{app}"""; Components: client\qt; Tasks: desktop
 
 [Run]
 Filename: "{app}\yate-service.exe"; Description: "Register service"; Parameters: "--install -w ""{app}"""; Components: server
 Filename: "net.exe"; Description: "Start service"; Components: server; Parameters: "start yate"; Flags: postinstall skipifsilent unchecked
-Filename: "{app}\yate-qt4.exe"; Parameters: "-n yate-qt4 -w ""{app}"""; Description: "Launch Qt client"; Components: client\qt; Flags: postinstall nowait skipifsilent unchecked
+Filename: "{app}\yate-qt5.exe"; Parameters: "-n yate-qt5 -w ""{app}"""; Description: "Launch Qt client"; Components: client\qt; Flags: postinstall nowait skipifsilent unchecked
 
 [UninstallRun]
 Filename: "net.exe"; Parameters: "stop yate"; Components: server

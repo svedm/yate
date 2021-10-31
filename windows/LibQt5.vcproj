@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="LibQt4"
+	Name="LibQt5"
 	ProjectGUID="{E98D46ED-71CD-7146-5CD8-16C08BC0A45C}"
-	RootNamespace="LibQt4"
+	RootNamespace="LibQt5"
 	>
 	<Platforms>
 		<Platform
@@ -43,18 +43,18 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/LibQt4.tlb"
+				TypeLibraryName=".\Debug/LibQt5.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,..,../clients/qt4"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBYQT4_EXPORTS;UNICODE"
+				AdditionalIncludeDirectories=".,..,../clients/qt5"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBYQT5_EXPORTS;UNICODE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\Debug/LibQt4.pch"
+				PrecompiledHeaderFile=".\Debug/LibQt5.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -75,13 +75,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="QtCoreD4.lib QtGuiD4.lib QtXmlD4.lib QtUiToolsD.lib"
-				OutputFile="Debug/Libyqt4.dll"
+				AdditionalDependencies="QtCoreD5.lib QtGuiD5.lib QtXmlD5.lib QtUiToolsD.lib"
+				OutputFile="Debug/Libyqt5.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/Libyqt4.pdb"
-				ImportLibrary=".\Debug/Libyqt4.lib"
+				ProgramDatabaseFile=".\Debug/Libyqt5.pdb"
+				ImportLibrary=".\Debug/Libyqt5.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -96,7 +96,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/LibQt4.bsc"
+				OutputFile=".\Debug/LibQt5.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -140,19 +140,19 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/LibQt4.tlb"
+				TypeLibraryName=".\Release/LibQt5.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".,..,../clients/qt4"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBYQT4_EXPORTS;UNICODE"
+				AdditionalIncludeDirectories=".,..,../clients/qt5"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBYQT5_EXPORTS;UNICODE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/LibQt4.pch"
+				PrecompiledHeaderFile=".\Release/LibQt5.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -172,12 +172,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="QtCore4.lib QtGui4.lib QtXml4.lib QtUiTools.lib"
-				OutputFile="Release/Libyqt4.dll"
+				AdditionalDependencies="QtCore5.lib QtGui5.lib QtXml5.lib QtUiTools.lib"
+				OutputFile="Release/Libyqt5.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/Libyqt4.pdb"
-				ImportLibrary=".\Release/Libyqt4.lib"
+				ProgramDatabaseFile=".\Release/Libyqt5.pdb"
+				ImportLibrary=".\Release/Libyqt5.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -192,7 +192,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/LibQt4.bsc"
+				OutputFile=".\Release/LibQt5.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -216,7 +216,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\clients\qt4\qt4client.cpp"
+				RelativePath="..\clients\qt5\qt5client.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -243,7 +243,7 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\clients\qt4\qt4client.h"
+				RelativePath="..\clients\qt5\qt5client.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -251,8 +251,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running MOC"
-						CommandLine="moc.exe  -DUNICODE -DWIN32  -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I..\..\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 -o Debug\moc_qt4client.cpp ..\clients\qt4\qt4client.h&#x0D;&#x0A;"
-						Outputs="Debug\moc_qt4client.cpp"
+						CommandLine="moc.exe  -DUNICODE -DWIN32  -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -I..\..\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 -o Debug\moc_qt5client.cpp ..\clients\qt5\qt5client.h&#x0D;&#x0A;"
+						Outputs="Debug\moc_qt5client.cpp"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -261,8 +261,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running MOC"
-						CommandLine="moc.exe  -DUNICODE -DWIN32  -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -D_MSC_VER=1400 -DWIN32 -o Release\moc_qt4client.cpp ..\clients\qt4\qt4client.h&#x0D;&#x0A;"
-						Outputs="Release\moc_qt4client.cpp"
+						CommandLine="moc.exe  -DUNICODE -DWIN32  -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -D_MSC_VER=1400 -DWIN32 -o Release\moc_qt5client.cpp ..\clients\qt5\qt5client.h&#x0D;&#x0A;"
+						Outputs="Release\moc_qt5client.cpp"
 					/>
 				</FileConfiguration>
 			</File>
@@ -296,7 +296,7 @@
 			Name="Generated Files"
 			>
 			<File
-				RelativePath=".\Release\moc_qt4client.cpp"
+				RelativePath=".\Release\moc_qt5client.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -319,7 +319,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Debug\moc_qt4client.cpp"
+				RelativePath=".\Debug\moc_qt5client.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"

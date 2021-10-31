@@ -2,10 +2,10 @@
  * updater.cpp
  * This file is part of the YATE Project http://YATE.null.ro
  *
- * Auto updater logic and downloader for Qt-4 clients.
+ * Auto updater logic and downloader for Qt-5 clients.
  *
  * Yet Another Telephony Engine - a fully featured software PBX and IVR
- * Copyright (C) 2004-2014 Null Team
+ * Copyright (C) 2004-2020 Null Team
  *
  * This software is distributed under multiple licenses;
  * see the COPYING file in the main directory for licensing
@@ -28,6 +28,9 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QProcess>
+#include <QNetworkAccessManager>
+#include <QNetworkProxy>
+#include <QNetworkReply>
 
 #define MIN_SIZE 1024
 #define MAX_SIZE (16*1024*1024)
@@ -68,7 +71,8 @@ public:
     virtual void exitingClient();
     virtual bool action(Window* wnd, const String& name, NamedList* params);
     virtual bool toggle(Window* wnd, const String& name, bool active);
-    void gotPercentage(int percent);
+    void dataProgress(qint64 done, qint64 total);
+    void requestDone();
     void endHttp(bool error);
 protected:
     void setPolicy(int policy, bool save);
@@ -87,7 +91,7 @@ private:
     bool m_checked;
     bool m_install;
     String m_url;
-    QHttp* m_http;
+    QNetworkReply* m_http;
     QFile* m_file;
     QtUpdateHttp* m_httpSlots;
     bool m_canUpdate;
@@ -112,7 +116,7 @@ static const TokenDict s_policies[] = {
     { "check",    UpdateLogic::Check    },
     { "download", UpdateLogic::Download },
     { "install",  UpdateLogic::Install  },
-    {0,0}
+    { 0,          UpdateLogic::Invalid  }
 };
 
 UpdateLogic::~UpdateLogic()
@@ -354,21 +358,23 @@ bool UpdateLogic::startHttp(const char* url, const QString& saveAs)
     }
     if (!m_httpSlots)
 	m_httpSlots = new QtUpdateHttp(this);
-    m_http = m_httpSlots->http();
     const char* proxy = Client::s_settings.getValue(toString(),"proxy_host");
-    if (proxy)
-	m_http->setProxy(proxy,
+    if (proxy) {
+	QNetworkProxy proxyCfg(QNetworkProxy::DefaultProxy,
+	    proxy,
 	    Client::s_settings.getIntValue(toString(),"proxy_port",8080),
 	    Client::s_settings.getValue(toString(),"proxy_user"),
 	    Client::s_settings.getValue(toString(),"proxy_pass"));
-    m_http->setHost(qurl.host(),qurl.port(80));
-    m_http->get(qurl.path(),file);
+	m_httpSlots->setProxy(proxyCfg);
+    }
+    QNetworkRequest req(qurl);
+    m_http = m_httpSlots->get(req);
     return true;
 }
 
 void UpdateLogic::stopHttp()
 {
-    QHttp* http = m_http;
+    QNetworkReply* http = m_http;
     m_http = 0;
     if (http) {
 	http->abort();
@@ -382,13 +388,6 @@ void UpdateLogic::stopFile()
     QFile* file = m_file;
     m_file = 0;
     delete file;
-}
-
-void UpdateLogic::gotPercentage(int percent)
-{
-    if (!Client::self())
-	return;
-    Client::self()->setSelect("upd_progress",String(percent));
 }
 
 void UpdateLogic::endHttp(bool error)
@@ -431,29 +430,57 @@ void UpdateLogic::endHttp(bool error)
     }
 }
 
-
-QHttp* QtUpdateHttp::http()
+void UpdateLogic::dataProgress(qint64 done, qint64 total)
 {
-    QHttp* h = new QHttp(this);
-    connect(h,SIGNAL(dataReadProgress(int,int)),this,SLOT(dataProgress(int,int)));
-    connect(h,SIGNAL(done(bool)),this,SLOT(requestDone(bool)));
-    return h;
-}
-
-void QtUpdateHttp::dataProgress(int done, int total)
-{
-    if (!m_logic)
-	return;
+    if (m_http && m_file) {
+	qint64 ready = m_http->bytesAvailable();
+	while (ready >= 1024) {
+	    char buf[1024];
+	    qint64 got = m_http->read(buf,std::min<qint64>(ready,sizeof(buf)));
+	    if (got <= 0)
+		break;
+	    m_file->write(buf,got);
+	    ready -= got;
+	}
+    }
     int percent = 0;
     if (done)
-	percent = (done <= total) ? (done * 100 / total) : 50;
-    m_logic->gotPercentage(percent);
+	percent = (done <= total) ? (int)((done * 100) / total) : 50;
+    if (!Client::self())
+	return;
+    Client::self()->setSelect("upd_progress",String(percent));
 }
 
-void QtUpdateHttp::requestDone(bool error)
+void UpdateLogic::requestDone()
+{
+    if (m_http && m_file) {
+	QByteArray buf = m_http->readAll();
+	m_file->write(buf);
+    }
+    endHttp(m_http ? (QNetworkReply::NoError != m_http->error()) : true);
+}
+
+
+QNetworkReply* QtUpdateHttp::get(const QNetworkRequest& request)
+{
+    QNetworkReply* reply = QNetworkAccessManager::get(request);
+    if (reply) {
+	connect(reply,&QNetworkReply::downloadProgress,this,&QtUpdateHttp::dataProgress);
+	connect(reply,&QNetworkReply::finished,this,&QtUpdateHttp::requestDone);
+    }
+    return reply;
+}
+
+void QtUpdateHttp::dataProgress(qint64 done, qint64 total)
 {
     if (m_logic)
-	m_logic->endHttp(error);
+	m_logic->dataProgress(done, total);
+}
+
+void QtUpdateHttp::requestDone()
+{
+    if (m_logic)
+	m_logic->requestDone();
 }
 
 

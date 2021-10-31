@@ -13,12 +13,12 @@ YATE_REVISION:= @PACKAGE_REVISION@
 
 CC  := @CC@ -Wall
 CXX := @CXX@ -Wall
-MOC := @QT4_MOC@
-QT4_INC := @QT4_INC@
-QT4_LIB := @QT4_LIB@
-QT4_INC_NET := @QT4_INC_NET@
-QT4_LIB_NET := @QT4_LIB_NET@
-QT4_STATIC_MODULES :=
+MOC := @QT5_MOC@
+QT5_INC := @QT5_INC@
+QT5_LIB := @QT5_LIB@
+QT5_INC_NET := @QT5_INC_NET@
+QT5_LIB_NET := @QT5_LIB_NET@
+QT5_STATIC_MODULES :=
 HAVE_PGSQL := @HAVE_PGSQL@
 PGSQL_INC := @PGSQL_INC@
 PGSQL_LIB := @PGSQL_LIB@
@@ -94,7 +94,7 @@ PROGS := cdrbuild.yate cdrcombine.yate cdrfile.yate regexroute.yate \
 	radio/dummyradio.yate radio/radiotest.yate
 
 LIBS :=
-DIRS := client server jabber qt4 sip sig radio
+DIRS := client server jabber qt5 sip sig radio
 
 ifneq ($(HAVE_PGSQL),no)
 PROGS := $(PROGS) server/pgsqldb.yate
@@ -124,10 +124,10 @@ ifneq (@HAVE_COREAUDIO@,no)
 PROGS := $(PROGS) client/coreaudio.yate
 endif
 
-ifneq (@HAVE_QT4@,no)
-ifeq (@QT4_STATIC_MODULES@,no)
-PROGS := $(PROGS) qt4/updater.yate qt4/customtable.yate qt4/customtext.yate \
-	qt4/customtree.yate qt4/widgetlist.yate qt4/clientarchive.yate
+ifneq (@HAVE_QT5@,no)
+ifeq (@QT5_STATIC_MODULES@,no)
+PROGS := $(PROGS) qt5/updater.yate qt5/customtable.yate qt5/customtext.yate \
+	qt5/customtree.yate qt5/widgetlist.yate qt5/clientarchive.yate
 endif
 endif
 
@@ -244,7 +244,7 @@ strip: all do-strip
 
 .PHONY: clean
 clean: do-clean
-	@-$(RM) $(PROGS) $(LIBS) *.o qt4/*.o qt4/*.moc core 2>/dev/null
+	@-$(RM) $(PROGS) $(LIBS) *.o qt5/*.o qt5/*.moc core 2>/dev/null
 	@-for i in $(PROGS) ; do \
 	    $(RM) -rf $$i.dSYM 2>/dev/null; \
 	done;
@@ -273,9 +273,9 @@ uninstall: do-uninstall
 subdirs:
 	@mkdir -p $(DIRS)
 
-qt4/%.o: @srcdir@/qt4/%.cpp $(MKDEPS) $(INCFILES)
+qt5/%.o: @srcdir@/qt5/%.cpp $(MKDEPS) $(INCFILES)
 	$(MAKE) $(patsubst %.o,%.moc,$@)
-	$(COMPILE) -c -o $@ $(QT4_INC) -I@top_srcdir@/clients/qt4 -I@srcdir@/qt4 $<
+	$(COMPILE) -c -o $@ $(QT5_INC) -I@top_srcdir@/clients/qt5 -I@srcdir@/qt5 $<
 
 %.o: @srcdir@/%.cpp $(MKDEPS) $(INCFILES)
 	$(COMPILE) -c $<
@@ -302,12 +302,12 @@ server/%.yate: @srcdir@/server/%.cpp $(MKDEPS) $(INCFILES)
 client/%.yate: @srcdir@/client/%.cpp $(MKDEPS) $(INCFILES)
 	mkdir -p client && $(MODCOMP) -o $@ $(LOCALFLAGS) $(EXTERNFLAGS) $< $(LOCALLIBS) $(YATELIBS) $(EXTERNLIBS)
 
-qt4/%.yate: @srcdir@/qt4/%.cpp ../libyateqt4.so $(MKDEPS) $(INCFILES)
+qt5/%.yate: @srcdir@/qt5/%.cpp ../libyateqt5.so $(MKDEPS) $(INCFILES)
 	$(MAKE) $(patsubst %.yate,%.moc,$@)
-	$(MODCOMP) -o $@ $(LOCALFLAGS) $(QT4_INC) $(EXTERNFLAGS) -I@top_srcdir@/clients/qt4 -Iqt4 $< $(LOCALLIBS) ../libyateqt4.so $(YATELIBS) $(QT4_LIB) $(EXTERNLIBS)
+	$(MODCOMP) -o $@ $(LOCALFLAGS) $(QT5_INC) $(EXTERNFLAGS) -I@top_srcdir@/clients/qt5 -Iqt5 $< $(LOCALLIBS) ../libyateqt5.so $(YATELIBS) $(QT5_LIB) $(EXTERNLIBS)
 
-qt4/%.moc: @srcdir@/qt4/%.h $(MKDEPS) $(INCFILES)
-	mkdir -p qt4 && $(MOC) $(DEFS) $(INCLUDES) $(QT4_INC) -I@top_srcdir@/clients/qt4 -I@srcdir@/qt4 -o $@ $<
+qt5/%.moc: @srcdir@/qt5/%.h $(MKDEPS) $(INCFILES)
+	mkdir -p qt5 && $(MOC) $(DEFS) $(INCLUDES) $(QT5_INC) -I@top_srcdir@/clients/qt5 -I@srcdir@/qt5 -o $@ $<
 
 sig/%.yate: @srcdir@/sig/%.cpp $(MKDEPS) $(INCFILES)
 	mkdir -p sig && $(MODCOMP) -o $@ $(LOCALFLAGS) $(EXTERNFLAGS) $< $(LOCALLIBS) $(YATELIBS) $(EXTERNLIBS)
@@ -418,8 +418,8 @@ openssl.yate: EXTERNLIBS = $(OPENSSL_LIB)
 rmanager.yate: EXTERNFLAGS = $(COREDUMP_INC) $(MALLINFO_DEF)
 rmanager.yate: EXTERNLIBS = $(COREDUMP_LIB)
 
-qt4/updater.yate: EXTERNFLAGS = $(QT4_INC_NET)
-qt4/updater.yate: EXTERNLIBS = $(QT4_LIB_NET)
+qt5/updater.yate: EXTERNFLAGS = $(QT5_INC_NET)
+qt5/updater.yate: EXTERNLIBS = $(QT5_LIB_NET)
 
 javascript.yate: ../libyatescript.so ../libs/ypbx/libyatepbx.a
 javascript.yate: LOCALFLAGS = -I@top_srcdir@/libs/yscript -I@top_srcdir@/libs/ypbx
@@ -474,8 +474,8 @@ radio/ybladerf.yate: EXTERNLIBS = $(LIBUSB_LIB) -lbladeRF
 ../libs/ypbx/libyatepbx.a: @top_srcdir@/libs/ypbx/yatepbx.h
 	$(MAKE) -C ../libs/ypbx
 
-../libyateqt4.so: @top_srcdir@/clients/qt4/qt4client.h
-	$(MAKE) -C ../clients/qt4
+../libyateqt5.so: @top_srcdir@/clients/qt5/qt5client.h
+	$(MAKE) -C ../clients/qt5
 
 ../libyateasn.so ../libs/yasn/libyasn.a: @top_srcdir@/libs/yasn/yateasn.h
 	$(MAKE) -C ../libs/yasn

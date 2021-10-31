@@ -2,10 +2,10 @@
  * updater.h
  * This file is part of the YATE Project http://YATE.null.ro
  *
- * Auto updater logic and downloader for Qt-4 clients.
+ * Auto updater logic and downloader for Qt-5 clients.
  *
  * Yet Another Telephony Engine - a fully featured software PBX and IVR
- * Copyright (C) 2004-2014 Null Team
+ * Copyright (C) 2004-2020 Null Team
  *
  * This software is distributed under multiple licenses;
  * see the COPYING file in the main directory for licensing
@@ -36,8 +36,7 @@
 #define QT_CORE_LIB
 #define QT_THREAD_SUPPORT
 
-#include <QObject>
-#include <QHttp>
+#include <QNetworkAccessManager>
 
 using namespace TelEngine;
 namespace { // anonymous
@@ -47,7 +46,7 @@ class UpdateLogic;
 /**
  * Proxy object so HTTP notification slots are created in the GUI thread
  */
-class QtUpdateHttp : public QObject
+class QtUpdateHttp : public QNetworkAccessManager
 {
     Q_CLASSINFO("QtUpdateHttp","Yate")
     Q_OBJECT
@@ -57,16 +56,18 @@ public:
      * @param logic Qt update logic owning this object
      */
     inline QtUpdateHttp(UpdateLogic* logic)
-	:  m_logic(logic)
+    :  QNetworkAccessManager(),
+	   m_logic(logic)
 	{ }
     /**
-     * Create a QHttp object and attach its signals to this object
-     * @return New QHttp object attached to this object's slots
+     * Start an HTTP request and create a corresponding QNetworkReply object
+     * with its signals attached to this object.
+     * @return New QNetworkReply object attached to this object's slots
      */
-    QHttp* http();
+    QNetworkReply* get(const QNetworkRequest& request);
 private slots:
-    void dataProgress(int done, int total);
-    void requestDone(bool error);
+    void dataProgress(qint64 done, qint64 total);
+    void requestDone();
 private:
     UpdateLogic* m_logic;
 };
